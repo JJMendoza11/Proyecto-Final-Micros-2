@@ -43,10 +43,10 @@ void UART0_Callback(uint_8 UARTVal){
 }
 
 void Decoder(void){
-	Time[0]=Segundos%60;
-	Time[1]=(Segundos%3600)/60;
-	Time[2]=(Segundos%216000)/3600;
-	if(Time[2]==24){
-		Time[2]=0;
+	Time[enSeg]=Segundos%60;
+	Time[enMin]=(Segundos%3600)/60;
+	Time[enHrs]=(Segundos%216000)/3600;
+	if(Time[enHrs]==24){
+		Time[enHrs]=0;
 	}
 }
