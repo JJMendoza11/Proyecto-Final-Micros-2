@@ -52,5 +52,14 @@ void UART0_Callback(uint_8 UARTVal){
 	}
 }
 
+void Relog_ChangeScreen (void)
+{
+	Mode++;
+	if(Mode == 3)
+	{
+		Mode = 0;
+	}
+}
+
 
 

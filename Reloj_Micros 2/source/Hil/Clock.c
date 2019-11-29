@@ -136,6 +136,11 @@ void Clock_vfnDisplayMenu(void)
 
 void Clock_vfnSetUp (uint8_t Val)
 {
+	if ( Val == 'W')
+	{
+		u32Snap = Segundos;
+		Relog_ChangeScreen();
+	}
 	if (ClockStates == enConfi)
 	{
 		if ( Val == 'S')
