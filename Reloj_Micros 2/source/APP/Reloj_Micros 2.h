@@ -8,6 +8,8 @@
 #ifndef RELOJ_MICROS_2_H_
 #define RELOJ_MICROS_2_H_
 
+typedef unsigned char uint8_t;
+
 #define ClockSet		(1<<0)
 #define ChronoSet		(1<<1)
 #define AlarmSet		(1<<2)
@@ -21,13 +23,15 @@ typedef enum{
 	enClock = 0,
 	enChronometer,
 	enAlarm,
-	enTimer
+	enTimer,
+	enTotalState
 }enClockStates;
 
 enum{
 	enSeg = 0,
 	enMin,
-	enHrs
+	enHrs,
+	enTotalTime
 };
 
 typedef struct{
@@ -39,7 +43,7 @@ typedef struct{
 	uint8_t  Year;
 }sSetThings;
 
-void Decoder(void);
+
 
 
 #endif /* RELOJ_MICROS_2_H_ */
