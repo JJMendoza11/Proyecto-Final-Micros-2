@@ -9,7 +9,7 @@ enClockStates u8StateMachineVal = enClock;
 //static uint8_t u8StatusFlag = 0;
 uint32_t Segundos=0;
 uint8_t  Mode=0;
-uint8_t Time[6]={};
+uint8_t Time[3]={};
 
 
 int main(void) {
@@ -25,7 +25,6 @@ int main(void) {
 
 
     while(1) {
-    	Decoder();
     }
     return 0 ;
 }
@@ -45,15 +44,9 @@ void UART0_Callback(uint_8 UARTVal){
 
 void Decoder(void){
 	Time[0]=Segundos%60;
-	Time[1]=Segundos%3600;
-	Time[2]=Segundos%216000;
-
-	if(Time[0]==60){
-		Time[0]=0;
-	}else if(Time[1]==60){
-		Time[1]=0;
-	}else if(Time[2]==24){
+	Time[1]=(Segundos%3600)/60;
+	Time[2]=(Segundos%216000)/3600;
+	if(Time[2]==24){
 		Time[2]=0;
 	}
-
 }
