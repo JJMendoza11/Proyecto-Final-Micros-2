@@ -24,6 +24,12 @@ typedef enum{
 	enTimer
 }enClockStates;
 
+enum{
+	enSeg = 0,
+	enMin,
+	enHrs
+};
+
 typedef struct{
 	uint8_t  Seg;
 	uint8_t  Min;
