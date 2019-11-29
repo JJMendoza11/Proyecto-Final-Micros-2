@@ -11,7 +11,6 @@
 #include "Reloj_Micros 2.h"
 
 extern uint32_t Segundos;
-
 _Bool Sumar = 0;
 _Bool x = 0;
 
@@ -22,6 +21,8 @@ tenClockStates ClockStates = enConfi;
 char u8Time[] = {"00:00"};
 char u8Date [] = {"01/Jan/00"};
 
+uint32_t u32Min2Sec = 0;
+uint32_t u32Hrs2Sec = 0;
 uint8_t Time[enTotalTime]={};
 uint32_t u32Snap = 0;
 uint8_t u8Min = 0;
@@ -98,6 +99,8 @@ void Clock_vfnMain ( void )
 			u32Snap = Segundos;
 			SSD1306_DrawFastHLine(68, 31, 25, 0);
 			SSD1306_DrawFastHLine(33, 31, 25, 0);
+			u32Min2Sec = u8Min * 60;
+			u32Hrs2Sec = u8Hrs * 3600;
 			ClockStates = enBusy;
 		break;
 	case enBusy:
@@ -116,10 +119,9 @@ void Clock_vfnMain ( void )
 		ClockStates = enBusy;
 		break;
 	default:
-		if(((Segundos - u32Snap) % 60) == 0)
-		{
-			ClockStates = enRefresh;
-		}
+
+			if((Segundos - u32Snap)%60 == 0)
+				ClockStates = enRefresh;
 
 		break;
 	}
@@ -162,15 +164,13 @@ void Clock_vfnSetUp (uint8_t Val)
 }
 
 void Decoder(void){
-	Time[enMin]=(((Segundos - u32Snap) %3600)/60) + u8Min;
-	Time[enHrs]=u8Hrs;
-	if(Time[enMin]==60){
-		Time[enMin]=0;
-		Time[enHrs]++;
+	Time[enMin]=(((Segundos - u32Snap + u32Min2Sec + u32Hrs2Sec ) %3600)/60);
 
-	}
-	//Time[enHrs]=(((Segundos - u32Snap) %216000)/3600) + u8Hrs;
+	Time[enHrs]=((((Segundos - u32Snap + u32Min2Sec + u32Hrs2Sec)) %216000)/3600);
+
 	if(Time[enHrs]==24){
 		Time[enHrs]=0;
 	}
+
+
 }
