@@ -15,6 +15,7 @@ void Clock_vfnInit ( void );
 void Clock_vfnMain ( void );
 void Clock_vfnSetUp (uint8_t Val);
 void Decoder(void);
+uint32_t getClockTime ( void );
 
 typedef enum{
 	enIdle = 0,

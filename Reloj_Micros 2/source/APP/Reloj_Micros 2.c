@@ -5,19 +5,22 @@
 #include "UART_DriverInt.h"
 #include "I2CDRIVE.h"
 #include "Clock.h"
+#include "Alarm.h"
 
 enClockStates u8StateMachineVal = enClock;
 //static uint8_t u8StatusFlag = 0;
 uint32_t Segundos=0;
+uint32_t DeadlineAlarm = 0;
+_Bool Alarm = 0;
 uint8_t NewTime = 0;
 uint8_t  Mode=0;
 
 
-	void (*aSetUp[])(uint8_t) = {Clock_vfnSetUp};
+	void (*aSetUp[])(uint8_t) = {Clock_vfnSetUp, Alarm_vfnSetUp};
+	void (*array[]) (void) = {Clock_vfnMain,Alarm_vfnMain};
 
 int main(void) {
 
-	void (*array[]) (void) = {Clock_vfnMain};
 	UART0_vfnCallbackReg(UART0_Callback);
 	I2C_vfnDriverInit();
 	Clock_vfnInit();
@@ -29,8 +32,12 @@ int main(void) {
 
 
     while(1) {
-    	for (uint8_t i = 0; i < 1; i++)
-    		array[i]();
+    		array[Mode]();
+    		if(Alarm && DeadlineAlarm == Segundos)
+    		{
+    			Mode = 1;
+    			Alarm_vfnHandler();
+    		}
     }
     return 0 ;
 }
@@ -39,26 +46,29 @@ void Seconds_vfnPlus(void){
 	Segundos++;
 }
 void UART0_Callback(uint_8 UARTVal){
-	if(UARTVal=='W'){
-		Mode++;
-		if(Mode==4){
-			Mode=0;
-		}
-		//PintarDislpay en posicionMod
-	}
-	else
-	{
+
 		aSetUp[Mode](UARTVal);
-	}
 }
 
-void Relog_ChangeScreen (void)
+void Reloj_ChangeScreen (void)
 {
 	Mode++;
-	if(Mode == 3)
+	if(Mode == 2)
 	{
 		Mode = 0;
 	}
+	array[Mode]();
+}
+
+void Reloj_SetAlarm (uint32_t u32SnapAlarm)
+{
+	Alarm = 1;
+	DeadlineAlarm = u32SnapAlarm;
+}
+
+void Reloj_StopAlarm (void)
+{
+	Alarm = 0;
 }
 
 

@@ -13,6 +13,7 @@
 extern uint32_t Segundos;
 _Bool Sumar = 0;
 _Bool x = 0;
+_Bool Onscreen = 0;
 
 
 tenClockStates ClockStates = enConfi;
@@ -55,6 +56,21 @@ void Clock_vfnInit ( void )
 
 void Clock_vfnMain ( void )
 {
+	if ( !Onscreen )
+	{
+		SSD1306_ClearDisplay();
+
+		Clock_vfnDisplayMenu();
+
+		SSD1306_DrawText(35, 16, u8Time, 2);
+
+		SSD1306_DrawText(0, 2, u8Date, 1);
+
+		SSD1306_DrawText(60, 2, "M Tu W Th F", 1);
+
+		SSD1306_Display();
+		Onscreen = 1;
+	}
 	switch (ClockStates)
 	{
 	case enConfi:
@@ -138,8 +154,9 @@ void Clock_vfnSetUp (uint8_t Val)
 {
 	if ( Val == 'W')
 	{
+		Onscreen = 0;
 		u32Snap = Segundos;
-		Relog_ChangeScreen();
+		Reloj_ChangeScreen();
 	}
 	if (ClockStates == enConfi)
 	{
@@ -176,6 +193,9 @@ void Decoder(void){
 	if(Time[enHrs]==24){
 		Time[enHrs]=0;
 	}
+}
 
-
+uint32_t getClockTime ( void )
+{
+	return u32Snap;
 }

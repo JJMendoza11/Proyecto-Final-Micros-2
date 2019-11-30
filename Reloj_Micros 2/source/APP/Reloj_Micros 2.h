@@ -43,7 +43,9 @@ typedef struct{
 	uint8_t  Year;
 }sSetThings;
 
-
+void Reloj_ChangeScreen(void);
+void Reloj_SetAlarm (uint32_t u32SnapAlarm);
+void Reloj_StopAlarm (void);
 
 
 #endif /* RELOJ_MICROS_2_H_ */
